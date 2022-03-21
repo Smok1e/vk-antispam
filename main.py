@@ -5,7 +5,13 @@ import os.path, json, traceback, vk_api, random, http.client, requests
 
 #=================================
 
+BUFFSIZE = 3
+
+#=================================
+
 def continue_text (text: str) -> str:
+    print (f"TEST: {text}")
+
     tries = 0
     while tries < 3:
         try:
@@ -19,7 +25,7 @@ def continue_text (text: str) -> str:
                 raise RuntimeError (f"Request failed: {http.client.responses [response.status_code]} ({response.status_code})")
 
             response_data = json.loads (response.text)
-            return text + response_data['replies'][0]
+            return response_data['replies'][0]
 
         except Exception as exc:
             traceback.print_exc ()
@@ -38,6 +44,7 @@ class Bot ():
 #=================================
 
     def __init__ (self):
+        self.buffer   = {}
         self.cache    = {}
         self.longpoll = None
         self.session  = None
@@ -139,6 +146,9 @@ class Bot ():
         if event.type != VkEventType.MESSAGE_NEW:
             return
 
+        if not event.from_user:
+            return
+
         if not event.to_me or not event.text:
             return
 
@@ -146,7 +156,23 @@ class Bot ():
             return
 
         self.log (f"Received message from id{event.user_id}: {event.text}")
-        self.send_message (event.user_id, continue_text (event.text))
+
+        text_begin = ""
+
+        key = str (event.user_id)
+        if key in self.buffer:
+            text_begin += ' '.join (self.buffer[str (event.user_id)])
+
+        else: self.buffer[key] = []
+
+        text_begin += event.text
+        message = continue_text (text_begin)
+
+        self.send_message (event.user_id, message)
+
+        self.buffer[key].append (event.text + message)
+        if len (self.buffer[key]) > BUFFSIZE:
+            self.buffer[key] = self.buffer[key][1:]
 
 #=================================
 
