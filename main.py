@@ -42,7 +42,7 @@ class Bot ():
         self.longpoll = None
         self.session  = None
 
-        if not os.path.exsits (self.ids_filename):
+        if not os.path.exists (self.ids_filename):
             with open (self.ids_filename, 'w') as file:
                 json.dump ([], file, indent = 4)
                 file.close ()
