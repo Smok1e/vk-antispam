@@ -1,0 +1,1 @@
+screen -S antispam python3 ./main.py
