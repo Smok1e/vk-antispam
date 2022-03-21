@@ -136,7 +136,7 @@ class Bot ():
 #=================================
 
     def handle_event (self, event):
-        if event.type != VkEventType.MESSAGE_NEW
+        if event.type != VkEventType.MESSAGE_NEW:
             return
 
         if not event.to_me or not event.text:
