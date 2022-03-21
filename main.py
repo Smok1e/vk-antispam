@@ -42,6 +42,13 @@ class Bot ():
         self.longpoll = None
         self.session  = None
 
+        if not os.path.exsits (self.ids_filename):
+            with open (self.ids_filename, 'w') as file:
+                json.dump ([], file, indent = 4)
+                file.close ()
+
+                self.log (f"File '{self.ids_filename}' is empty. Add ids in this file to reply them.")            
+
         if os.path.exists (self.log_filename):
             os.remove (self.log_filename)
 
