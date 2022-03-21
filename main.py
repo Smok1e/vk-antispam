@@ -47,7 +47,7 @@ class Bot ():
                 json.dump ([], file, indent = 4)
                 file.close ()
 
-                self.log (f"File '{self.ids_filename}' is empty. Add ids in this file to reply them.")            
+                self.log (f"File '{self.ids_filename}' looks to be empty. Add ids you wish the bot to reply to into this file.")            
 
         if os.path.exists (self.log_filename):
             os.remove (self.log_filename)
@@ -73,14 +73,14 @@ class Bot ():
                 return
 
             while True:
-                print ("Do you want to save token in cache? [y/n]: ", end = '')
+                print ("Do you want to save the token in cache? [y/n]: ", end = '')
                 
                 ans = input ()
                 if not len (ans): continue
 
                 if ans.startswith ('y'):
                     try:
-                        self.log ("Saving cache")
+                        self.log ("Saving the cache")
 
                         with open (self.cache_filename, 'w') as file:
                             json.dump (self.cache, file, indent = 4)
@@ -100,7 +100,7 @@ class Bot ():
 #=================================
 
     def start (self):
-        self.log ("Starting bot...")
+        self.log ("Starting the bot...")
         
         if not self.session:
             self.log ("Failed")
