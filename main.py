@@ -136,7 +136,10 @@ class Bot ():
 #=================================
 
     def handle_event (self, event):
-        if event.type != VkEventType.MESSAGE_NEW or not event.to_me or not event.text:
+        if event.type != VkEventType.MESSAGE_NEW
+            return
+
+        if not event.to_me or not event.text:
             return
 
         if not event.user_id in self.get_spam_ids ():
